@@ -11,6 +11,7 @@ const nextConfig = {
 
   // Config Webpack (hanya jalan jika pakai flag --webpack)
   webpack: (config) => {
+    config.resolve.symlinks = false; // Nonaktifkan symlinks untuk menghindari error path di CPanel
     config.externals = [...(config.externals || []), '@prisma/client', 'bcrypt', 'prisma'];
     return config;
   },
