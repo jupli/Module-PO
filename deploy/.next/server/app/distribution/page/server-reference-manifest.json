@@ -1,0 +1,80 @@
+{
+  "node": {
+    "002eef9f4dc6d6e9b7d19aa884919ffb62b6f3ec8c": {
+      "workers": {
+        "app/distribution/page": {
+          "moduleId": 25870,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        }
+      },
+      "layer": {
+        "app/distribution/page": "action-browser"
+      },
+      "exportedName": "logout",
+      "filename": "src/app/actions/auth.ts"
+    },
+    "004602c6b53f743417d2d47bc90d32272992e22bb0": {
+      "workers": {
+        "app/distribution/page": {
+          "moduleId": 25870,
+          "async": false,
+          "exportedName": "getDistributionItems",
+          "filename": "src/app/actions/distribution.ts"
+        }
+      },
+      "layer": {
+        "app/distribution/page": "rsc"
+      },
+      "exportedName": "getDistributionItems",
+      "filename": "src/app/actions/distribution.ts"
+    },
+    "603bf5e0aa1253255a7044123600db6643e26f36c7": {
+      "workers": {
+        "app/distribution/page": {
+          "moduleId": 25870,
+          "async": false,
+          "exportedName": "submitQC",
+          "filename": "src/app/actions/distribution.ts"
+        }
+      },
+      "layer": {
+        "app/distribution/page": "action-browser"
+      },
+      "exportedName": "submitQC",
+      "filename": "src/app/actions/distribution.ts"
+    },
+    "604abf21d5cb1ceb02c49ea38cb4d63dc8fbdcf47a": {
+      "workers": {
+        "app/distribution/page": {
+          "moduleId": 25870,
+          "async": false,
+          "exportedName": "shipItem",
+          "filename": "src/app/actions/distribution.ts"
+        }
+      },
+      "layer": {
+        "app/distribution/page": "action-browser"
+      },
+      "exportedName": "shipItem",
+      "filename": "src/app/actions/distribution.ts"
+    },
+    "40af95d2e4b21d9c4a25ec616ab9cfabd67f676c78": {
+      "workers": {
+        "app/distribution/page": {
+          "moduleId": 25870,
+          "async": false,
+          "exportedName": "archiveDocument",
+          "filename": "src/app/actions/archive.ts"
+        }
+      },
+      "layer": {
+        "app/distribution/page": "action-browser"
+      },
+      "exportedName": "archiveDocument",
+      "filename": "src/app/actions/archive.ts"
+    }
+  },
+  "edge": {}
+}

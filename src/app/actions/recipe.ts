@@ -70,8 +70,7 @@ export async function extractAndSaveRecipes(items: any[], date?: string, request
                   product = await prisma.product.findFirst({
                       where: { 
                         name: {
-                            equals: normalizedName,
-                            mode: 'insensitive'
+                            equals: normalizedName
                         }
                       }
                   })

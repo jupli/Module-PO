@@ -8,7 +8,9 @@ import { createGoodsReceipt } from '@/app/actions/po'
 export default function ReceiveForm({ po }: { po: any }) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  
+  const [isSuccess, setIsSuccess] = useState(false)
+  const isReceived = po.status === 'RECEIVED' || isSuccess
+
   const [formData, setFormData] = useState({
     doNumber: '',
     receivedAt: new Date().toISOString().slice(0, 16), // YYYY-MM-DDTHH:mm
@@ -25,14 +27,16 @@ export default function ReceiveForm({ po }: { po: any }) {
     productCategory: string
     quantity: number | string
     quantityRejected: number | string
+    totalReceived: number
     condition: string
   }[]>(po.items.map((item: any) => ({
     poItemId: item.id,
     productId: item.productId,
     productName: item.product.name,
     productCategory: item.product.category || 'Lain-lain',
-    quantity: item.quantity, // Default to PO quantity
+    quantity: item.quantity, // Default to PO quantity (Net Good)
     quantityRejected: 0,
+    totalReceived: item.quantity, // Track total physical quantity
     condition: 'Baik'
   })))
 
@@ -76,8 +80,8 @@ export default function ReceiveForm({ po }: { po: any }) {
       })
 
       if (result.success) {
-        alert('Barang berhasil diterima!')
-        router.push('/inventory/incoming')
+        setIsSuccess(true)
+        // router.push('/inventory/incoming') // Removed as per user request
       } else {
         alert('Gagal menerima barang: ' + result.error)
       }
@@ -94,8 +98,15 @@ export default function ReceiveForm({ po }: { po: any }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
+      {isReceived && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+          <strong className="font-bold">Info: </strong>
+          <span className="block sm:inline">Barang sudah diterima.</span>
+        </div>
+      )}
+
       {/* Header Info */}
-      <div className="bg-white p-6 rounded-lg shadow space-y-4">
+      <div className={`bg-white p-6 rounded-lg shadow space-y-4 ${isReceived ? 'opacity-75 pointer-events-none' : ''}`}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700">Nomor PO (Otomatis)</label>
@@ -149,7 +160,7 @@ export default function ReceiveForm({ po }: { po: any }) {
       </div>
 
       {/* Items List */}
-      <div className="bg-white p-6 rounded-lg shadow">
+      <div className={`bg-white p-6 rounded-lg shadow ${isReceived ? 'opacity-75 pointer-events-none' : ''}`}>
         <h3 className="text-lg font-medium text-gray-900 mb-4">Detail Bahan yang Dikirim</h3>
         
         {/* Helper function to render table */}
@@ -192,8 +203,11 @@ export default function ReceiveForm({ po }: { po: any }) {
                                     step="any"
                                     value={item.quantity}
                                     onChange={(e) => {
+                                        const val = Number(e.target.value)
                                         const newItems = [...items]
-                                        newItems[originalIndex].quantity = e.target.value
+                                        newItems[originalIndex].quantity = val
+                                        // Update Total Physical = New Good + Rejected
+                                        newItems[originalIndex].totalReceived = val + Number(newItems[originalIndex].quantityRejected || 0)
                                         setItems(newItems)
                                     }}
                                     className="w-24 border border-gray-300 rounded-md px-2 py-1"
@@ -206,8 +220,36 @@ export default function ReceiveForm({ po }: { po: any }) {
                                     step="any"
                                     value={item.quantityRejected}
                                     onChange={(e) => {
+                                        let val = Number(e.target.value)
                                         const newItems = [...items]
-                                        newItems[originalIndex].quantityRejected = e.target.value
+                                        const idx = originalIndex
+                                        
+                                        // Validation: Rejected Qty cannot exceed Total Received (or PO Qty if tracking against PO)
+                                        // Logic: The user wants "TIDAK DAPAT MELEBIHI DARI JUMLAH Qty PO ITEM NYA"
+                                        const poQty = po.items.find((i: any) => i.id === item.poItemId)?.quantity || 0
+                                        
+                                        if (val > poQty) {
+                                            val = poQty // Clamp to PO Qty
+                                            // Optional: Alert user? Or just clamp. Clamping is less intrusive but strict.
+                                        }
+
+                                        newItems[idx].quantityRejected = val
+                                        // Update Good Qty = Total Physical - New Rejected
+                                        // Ensure totalReceived exists, fallback to quantity if undefined (legacy safety)
+                                        // NOTE: If we want to strictly follow "Total Received" input by user, we should use that.
+                                        // However, in this flow, "Total Received" seems derived or fixed to PO Qty initially.
+                                        // If the user modifies "Qty Diterima (Bagus)" directly, totalReceived updates.
+                                        // Here we assume totalReceived is the anchor.
+                                        
+                                        const currentTotal = newItems[idx].totalReceived ?? Number(newItems[idx].quantity)
+                                        
+                                        // Additional safety: rejected cannot exceed total received either
+                                        if (val > currentTotal) {
+                                             val = currentTotal
+                                             newItems[idx].quantityRejected = val
+                                        }
+
+                                        newItems[idx].quantity = Math.max(0, currentTotal - val)
                                         setItems(newItems)
                                     }}
                                     className="w-24 border border-red-300 rounded-md px-2 py-1 bg-red-50"
@@ -237,7 +279,7 @@ export default function ReceiveForm({ po }: { po: any }) {
       </div>
 
       {/* Signatures */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 ${isReceived ? 'opacity-75 pointer-events-none' : ''}`}>
         {/* Receiver Signature */}
         <div className="bg-white p-6 rounded-lg shadow">
           <h3 className="text-lg font-medium text-gray-900 mb-4">Pihak Penerima (Gudang)</h3>
@@ -308,21 +350,34 @@ export default function ReceiveForm({ po }: { po: any }) {
       </div>
 
       <div className="flex justify-end space-x-4">
-        <button
-          type="button"
-          onClick={() => router.back()}
-          disabled={loading}
-          className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300"
-        >
-          Batal
-        </button>
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 font-bold"
-        >
-          {loading ? 'Memproses...' : 'Simpan Penerimaan Barang'}
-        </button>
+        {!isReceived && (
+          <>
+            <button
+              type="button"
+              onClick={() => router.back()}
+              disabled={loading}
+              className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 font-bold"
+            >
+              {loading ? 'Memproses...' : 'Simpan Penerimaan Barang'}
+            </button>
+          </>
+        )}
+        {isReceived && (
+            <button
+              type="button"
+              onClick={() => router.push('/inventory/incoming')}
+              className="bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700 font-bold"
+            >
+              Kembali ke Menu
+            </button>
+        )}
       </div>
     </form>
   )

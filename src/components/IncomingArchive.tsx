@@ -125,7 +125,12 @@ export default function IncomingArchive({ receivedHistory }: IncomingArchiveProp
                               <div className="flex flex-col items-start">
                                 <span className="font-medium">{po.goodsReceipt?.receiver || '-'}</span>
                                 {po.goodsReceipt?.receiverSign && (
-                                  <img src={po.goodsReceipt.receiverSign} alt="TTD Penerima" className="h-10 mt-1 border rounded bg-white" />
+                                  <img 
+                                    src={po.goodsReceipt.receiverSign} 
+                                    alt="TTD Penerima" 
+                                    className="h-12 w-auto object-contain mt-1 border rounded bg-white" 
+                                    title={`TTD oleh ${po.goodsReceipt.receiver}`}
+                                  />
                                 )}
                               </div>
                             </td>
@@ -133,7 +138,12 @@ export default function IncomingArchive({ receivedHistory }: IncomingArchiveProp
                               <div className="flex flex-col items-start">
                                 <span className="font-medium">{po.goodsReceipt?.courier || '-'}</span>
                                 {po.goodsReceipt?.courierSign && (
-                                  <img src={po.goodsReceipt.courierSign} alt="TTD Pengirim" className="h-10 mt-1 border rounded bg-white" />
+                                  <img 
+                                    src={po.goodsReceipt.courierSign} 
+                                    alt="TTD Pengirim" 
+                                    className="h-12 w-auto object-contain mt-1 border rounded bg-white"
+                                    title={`TTD oleh ${po.goodsReceipt.courier}`}
+                                  />
                                 )}
                               </div>
                             </td>

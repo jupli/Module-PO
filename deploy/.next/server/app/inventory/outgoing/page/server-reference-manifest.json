@@ -1,0 +1,140 @@
+{
+  "node": {
+    "002eef9f4dc6d6e9b7d19aa884919ffb62b6f3ec8c": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "action-browser"
+      },
+      "exportedName": "logout",
+      "filename": "src/app/actions/auth.ts"
+    },
+    "00994176a85eb633c3b6ecc5fc97724d818e0f6a0b": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "getCategories",
+          "filename": "src/app/actions/product.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "rsc"
+      },
+      "exportedName": "getCategories",
+      "filename": "src/app/actions/product.ts"
+    },
+    "00ded28e6d9cd2cb9eeb2c2858909f25b916ed6e09": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "getProducts",
+          "filename": "src/app/actions/product.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "rsc"
+      },
+      "exportedName": "getProducts",
+      "filename": "src/app/actions/product.ts"
+    },
+    "404aa834d8c9cd95077733fa677b6d347918bf647e": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "createProduct",
+          "filename": "src/app/actions/product.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "rsc"
+      },
+      "exportedName": "createProduct",
+      "filename": "src/app/actions/product.ts"
+    },
+    "40965d215d82294c2985552e42065ac20fa06d1d12": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "getProductsByCategory",
+          "filename": "src/app/actions/product.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "rsc"
+      },
+      "exportedName": "getProductsByCategory",
+      "filename": "src/app/actions/product.ts"
+    },
+    "608ff4a883cf4b17f4e193cfd1891d610296d0abf0": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "updateProduct",
+          "filename": "src/app/actions/product.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "rsc"
+      },
+      "exportedName": "updateProduct",
+      "filename": "src/app/actions/product.ts"
+    },
+    "00653f6d8cb33cf53b8f2876abb920036fd13f6828": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "getRecipes",
+          "filename": "src/app/actions/recipe.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "rsc"
+      },
+      "exportedName": "getRecipes",
+      "filename": "src/app/actions/recipe.ts"
+    },
+    "60697e3e362f0bda2453e624f027d21c59c8c384ad": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "cookMenu",
+          "filename": "src/app/actions/recipe.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "action-browser"
+      },
+      "exportedName": "cookMenu",
+      "filename": "src/app/actions/recipe.ts"
+    },
+    "704619324dcd98b923092a00fcd5f782ac1eea437f": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "extractAndSaveRecipes",
+          "filename": "src/app/actions/recipe.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "rsc"
+      },
+      "exportedName": "extractAndSaveRecipes",
+      "filename": "src/app/actions/recipe.ts"
+    }
+  },
+  "edge": {}
+}

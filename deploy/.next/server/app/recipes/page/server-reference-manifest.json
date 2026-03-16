@@ -1,0 +1,65 @@
+{
+  "node": {
+    "002eef9f4dc6d6e9b7d19aa884919ffb62b6f3ec8c": {
+      "workers": {
+        "app/recipes/page": {
+          "moduleId": 57524,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        }
+      },
+      "layer": {
+        "app/recipes/page": "action-browser"
+      },
+      "exportedName": "logout",
+      "filename": "src/app/actions/auth.ts"
+    },
+    "00653f6d8cb33cf53b8f2876abb920036fd13f6828": {
+      "workers": {
+        "app/recipes/page": {
+          "moduleId": 57524,
+          "async": false,
+          "exportedName": "getRecipes",
+          "filename": "src/app/actions/recipe.ts"
+        }
+      },
+      "layer": {
+        "app/recipes/page": "rsc"
+      },
+      "exportedName": "getRecipes",
+      "filename": "src/app/actions/recipe.ts"
+    },
+    "60697e3e362f0bda2453e624f027d21c59c8c384ad": {
+      "workers": {
+        "app/recipes/page": {
+          "moduleId": 57524,
+          "async": false,
+          "exportedName": "cookMenu",
+          "filename": "src/app/actions/recipe.ts"
+        }
+      },
+      "layer": {
+        "app/recipes/page": "rsc"
+      },
+      "exportedName": "cookMenu",
+      "filename": "src/app/actions/recipe.ts"
+    },
+    "704619324dcd98b923092a00fcd5f782ac1eea437f": {
+      "workers": {
+        "app/recipes/page": {
+          "moduleId": 57524,
+          "async": false,
+          "exportedName": "extractAndSaveRecipes",
+          "filename": "src/app/actions/recipe.ts"
+        }
+      },
+      "layer": {
+        "app/recipes/page": "rsc"
+      },
+      "exportedName": "extractAndSaveRecipes",
+      "filename": "src/app/actions/recipe.ts"
+    }
+  },
+  "edge": {}
+}

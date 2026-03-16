@@ -13,7 +13,8 @@ export async function getPurchaseOrders() {
           include: {
             product: true
           }
-        }
+        },
+        payments: true
       },
       orderBy: { createdAt: 'desc' }
     })
@@ -166,7 +167,16 @@ export async function createGoodsReceipt(data: {
   items: { productId: string, quantity: number, quantityRejected?: number, condition?: string }[]
 }) {
   try {
-    const result = await prisma.$transaction(async (tx: any) => {
+    // 0. Check if Receipt already exists
+    const existingReceipt = await prisma.goodsReceipt.findUnique({
+      where: { poId: data.poId }
+    })
+
+    if (existingReceipt) {
+      return { success: false, error: 'Goods Receipt already exists for this PO.' }
+    }
+
+    const result = await prisma.$transaction(async (tx) => {
       // 1. Create GoodsReceipt
       const receipt = await tx.goodsReceipt.create({
         data: {
@@ -197,8 +207,33 @@ export async function createGoodsReceipt(data: {
         include: { items: true }
       })
 
-      // 3. Update Inventory & Create Stock Movement
-      for (const item of data.items) {
+      // Update PO items in parallel
+      await Promise.all(data.items.map(async (receivedItem: any) => {
+          const originalItem = po.items.find((i: any) => i.productId === receivedItem.productId)
+          if (originalItem) {
+              await tx.purchaseOrderItem.update({
+                  where: { id: originalItem.id },
+                  data: { quantity: receivedItem.quantity }
+              })
+          }
+      }))
+
+      // Calculate total amount
+      let updatedTotalAmount = 0
+      for (const receivedItem of data.items) {
+          const originalItem = po.items.find((i: any) => i.productId === receivedItem.productId)
+          if (originalItem) {
+              updatedTotalAmount += (receivedItem.quantity * Number(originalItem.price))
+          }
+      }
+
+      await tx.purchaseOrder.update({
+          where: { id: data.poId },
+          data: { totalAmount: updatedTotalAmount }
+      })
+
+      // Update stock and create movement in parallel
+      await Promise.all(data.items.map(async (item: any) => {
         if (item.quantity > 0) {
             await tx.product.update({
               where: { id: item.productId },
@@ -217,7 +252,7 @@ export async function createGoodsReceipt(data: {
               }
             })
         }
-      }
+      }))
 
       // 4. Handle Returns (Auto-Create Replacement PO)
       const rejectedItems = data.items.filter((i: any) => i.quantityRejected && i.quantityRejected > 0)
@@ -260,6 +295,9 @@ export async function createGoodsReceipt(data: {
       }
 
       return receipt
+    }, {
+      maxWait: 10000,
+      timeout: 60000
     })
 
     revalidatePath('/inventory/incoming')

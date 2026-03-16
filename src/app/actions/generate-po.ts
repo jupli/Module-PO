@@ -85,8 +85,7 @@ export async function generatePOsFromRequest(requestNumber: string, items: Reque
             product = await prisma.product.findFirst({
                 where: { 
                     name: {
-                        equals: normalizedName,
-                        mode: 'insensitive'
+                        equals: normalizedName
                     }
                 }
             })

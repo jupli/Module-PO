@@ -1,0 +1,65 @@
+{
+  "node": {
+    "002eef9f4dc6d6e9b7d19aa884919ffb62b6f3ec8c": {
+      "workers": {
+        "app/suppliers/page": {
+          "moduleId": 2075,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        }
+      },
+      "layer": {
+        "app/suppliers/page": "action-browser"
+      },
+      "exportedName": "logout",
+      "filename": "src/app/actions/auth.ts"
+    },
+    "002a413351110812c34e5ff9c0ee9d6c03fabdf05e": {
+      "workers": {
+        "app/suppliers/page": {
+          "moduleId": 2075,
+          "async": false,
+          "exportedName": "getSuppliers",
+          "filename": "src/app/actions/supplier.ts"
+        }
+      },
+      "layer": {
+        "app/suppliers/page": "rsc"
+      },
+      "exportedName": "getSuppliers",
+      "filename": "src/app/actions/supplier.ts"
+    },
+    "404154a0bdeac5ecd24632cd93c88e98048a119988": {
+      "workers": {
+        "app/suppliers/page": {
+          "moduleId": 2075,
+          "async": false,
+          "exportedName": "createSupplier",
+          "filename": "src/app/actions/supplier.ts"
+        }
+      },
+      "layer": {
+        "app/suppliers/page": "rsc"
+      },
+      "exportedName": "createSupplier",
+      "filename": "src/app/actions/supplier.ts"
+    },
+    "60a664b00201dad7b4ff968e8fe63da3530f461d76": {
+      "workers": {
+        "app/suppliers/page": {
+          "moduleId": 2075,
+          "async": false,
+          "exportedName": "updateSupplier",
+          "filename": "src/app/actions/supplier.ts"
+        }
+      },
+      "layer": {
+        "app/suppliers/page": "rsc"
+      },
+      "exportedName": "updateSupplier",
+      "filename": "src/app/actions/supplier.ts"
+    }
+  },
+  "edge": {}
+}

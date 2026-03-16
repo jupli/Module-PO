@@ -1,58 +1,61 @@
-// @ts-nocheck
+
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-async function main() {
-  console.log('Starting data reset...')
-
-  // Delete transaction data first (child tables first to avoid FK constraints)
+async function resetData() {
+  console.log('⚠️  Starting FULL DATA RESET for Purchase Orders and related transactions...')
   
-  console.log('Deleting StockMovements...')
-  await prisma.stockMovement.deleteMany({})
+  try {
+    // 1. Clear Downstream Transactions (Delivery, Stock, Recipes)
+    console.log('1. Clearing Delivery Queue...')
+    await prisma.deliveryQueue.deleteMany({})
 
-  console.log('Deleting GoodsReceiptItems...')
-  await prisma.goodsReceiptItem.deleteMany({})
+    console.log('2. Clearing Stock Movements & Resetting Product Quantities...')
+    await prisma.stockMovement.deleteMany({})
+    await prisma.product.updateMany({
+      data: { quantity: 0 }
+    })
 
-  console.log('Deleting GoodsReceipts...')
-  await prisma.goodsReceipt.deleteMany({})
+    console.log('3. Clearing Recipes...')
+    await prisma.recipeItem.deleteMany({})
+    await prisma.recipe.deleteMany({})
 
-  console.log('Deleting PurchaseOrderItems...')
-  await prisma.purchaseOrderItem.deleteMany({})
+    // 2. Clear Purchase Cycle (GR -> PO -> PR)
+    console.log('4. Clearing Goods Receipts...')
+    await prisma.goodsReceiptItem.deleteMany({})
+    await prisma.goodsReceipt.deleteMany({})
 
-  console.log('Deleting PurchaseOrders...')
-  await prisma.purchaseOrder.deleteMany({})
+    console.log('5. Clearing Purchase Payments...')
+    await prisma.purchasePayment.deleteMany({})
 
-  // Reset Product Stock to 0
-  console.log('Resetting Product Stock...')
-  await prisma.product.updateMany({
-    data: {
-      quantity: 0
-    }
-  })
+    console.log('6. Clearing Purchase Orders...')
+    await prisma.purchaseOrderItem.deleteMany({})
+    await prisma.purchaseOrder.deleteMany({})
 
-  // Delete Recipe data
-  console.log('Deleting RecipeItems...')
-  await prisma.recipeItem.deleteMany({})
+    console.log('7. Clearing Purchase Requests...')
+    await prisma.purchaseRequestItem.deleteMany({})
+    await prisma.purchaseRequest.deleteMany({})
 
-  console.log('Deleting Recipes...')
-  await prisma.recipe.deleteMany({})
-
-  // Optional: Delete Master Data
-  console.log('Deleting Products...')
-  await prisma.product.deleteMany({})
-  
-  // console.log('Deleting Suppliers...')
-  // await prisma.supplier.deleteMany({})
-
-  console.log('Data reset complete!')
+    // Optional: Clear Beneficiaries if "Input dari awal" implies new Excel with school data
+    // But usually this is Master Data. I'll keep it for now unless requested, 
+    // or maybe I should ask? 
+    // User said "DATA-DATA PURCHASE ORDERS", but "INPUT DATA DARI AWAL".
+    // Safest is to keep Beneficiaries (Master Data-ish) but clear transactions.
+    
+    console.log('✅  Data Reset Complete!')
+    console.log('   - Purchase Orders: DELETED')
+    console.log('   - Purchase Requests: DELETED')
+    console.log('   - Goods Receipts: DELETED')
+    console.log('   - Payments: DELETED')
+    console.log('   - Stock & Delivery: CLEARED')
+    console.log('   - Product Quantities: RESET to 0')
+    
+  } catch (error) {
+    console.error('❌ Error during reset:', error)
+  } finally {
+    await prisma.$disconnect()
+  }
 }
 
-main()
-  .catch((e) => {
-    console.error(e)
-    process.exit(1)
-  })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
+resetData()

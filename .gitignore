@@ -23,6 +23,9 @@
 # misc
 .DS_Store
 *.pem
+id_rsa
+*.zip
+*.log
 
 # debug
 npm-debug.log*

@@ -78,6 +78,7 @@ export async function createProduct(formData: FormData) {
   const quantity = parseInt(formData.get('quantity') as string) || 0
   const price = parseFloat(formData.get('price') as string) || 0
   const unit = formData.get('unit') as string
+  const category = formData.get('category') as string
 
   try {
     await prisma.product.create({
@@ -87,7 +88,8 @@ export async function createProduct(formData: FormData) {
         description,
         quantity,
         price,
-        unit
+        unit,
+        category
       }
     })
     revalidatePath('/products')
@@ -104,6 +106,7 @@ export async function updateProduct(id: string, formData: FormData) {
   // Quantity cannot be updated directly via edit to maintain stock integrity
   const price = parseFloat(formData.get('price') as string) || 0
   const unit = formData.get('unit') as string
+  const category = formData.get('category') as string
 
   try {
     await prisma.product.update({
@@ -113,7 +116,8 @@ export async function updateProduct(id: string, formData: FormData) {
         sku,
         description,
         price,
-        unit
+        unit,
+        ...(category && { category }) // Only update if category is provided
       }
     })
     revalidatePath('/products')
@@ -121,4 +125,30 @@ export async function updateProduct(id: string, formData: FormData) {
   } catch (error) {
     return { success: false, error: 'Failed to update product' }
   }
+}
+
+export async function switchProductCategory(id: string, newCategory: string) {
+    try {
+        await prisma.product.update({
+            where: { id },
+            data: { category: newCategory }
+        })
+        revalidatePath('/products')
+        return { success: true }
+    } catch (error) {
+        return { success: false, error: 'Failed to switch category' }
+    }
+}
+
+export async function deleteProduct(id: string) {
+    try {
+        await prisma.product.delete({
+            where: { id }
+        })
+        revalidatePath('/products')
+        return { success: true }
+    } catch (error) {
+        console.error('Delete Error:', error)
+        return { success: false, error: 'Failed to delete product. It might be used in other records.' }
+    }
 }

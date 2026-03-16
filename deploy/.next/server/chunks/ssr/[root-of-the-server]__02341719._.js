@@ -1,0 +1,3 @@
+module.exports=[14747,(a,b,c)=>{b.exports=a.x("path",()=>require("path"))},22734,(a,b,c)=>{b.exports=a.x("fs",()=>require("fs"))},18841,a=>{"use strict";var b=a.i(5050);let c=(0,b.createServerReference)("40af95d2e4b21d9c4a25ec616ab9cfabd67f676c78",b.callServer,void 0,b.findSourceMapURL,"archiveDocument");a.s(["archiveDocument",()=>c])}];
+
+//# sourceMappingURL=%5Broot-of-the-server%5D__02341719._.js.map

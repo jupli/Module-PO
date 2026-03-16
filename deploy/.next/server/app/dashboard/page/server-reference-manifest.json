@@ -1,0 +1,35 @@
+{
+  "node": {
+    "002eef9f4dc6d6e9b7d19aa884919ffb62b6f3ec8c": {
+      "workers": {
+        "app/dashboard/page": {
+          "moduleId": 79455,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        }
+      },
+      "layer": {
+        "app/dashboard/page": "action-browser"
+      },
+      "exportedName": "logout",
+      "filename": "src/app/actions/auth.ts"
+    },
+    "00009de7bc07746f342436a1d04aaf56b9c80f8d24": {
+      "workers": {
+        "app/dashboard/page": {
+          "moduleId": 79455,
+          "async": false,
+          "exportedName": "getDashboardStats",
+          "filename": "src/app/actions/dashboard.ts"
+        }
+      },
+      "layer": {
+        "app/dashboard/page": "rsc"
+      },
+      "exportedName": "getDashboardStats",
+      "filename": "src/app/actions/dashboard.ts"
+    }
+  },
+  "edge": {}
+}

@@ -1,0 +1,175 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  sku         String   @unique
+  description String?
+  quantity    Float    @default(0)
+  price       Float    @default(0)
+  unit        String   @default("pcs")
+  category    String?
+  supplierId  String?  @db.ObjectId
+  supplier    Supplier? @relation(fields: [supplierId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  purchaseOrderItems PurchaseOrderItem[]
+  stockMovements     StockMovement[]
+  goodsReceiptItems  GoodsReceiptItem[]
+  recipeItems        RecipeItem[]
+}
+
+model Supplier {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  contact   String?
+  address   String?
+  email     String?
+  phone     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  purchaseOrders PurchaseOrder[]
+  products       Product[]
+}
+
+enum POStatus {
+  PENDING
+  APPROVED
+  KIRIM
+  REJECTED
+  RECEIVED
+  CANCELLED
+}
+
+enum MovementType {
+  IN
+  OUT
+}
+
+model PurchaseOrder {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  poNumber    String   @unique
+  supplierId  String   @db.ObjectId
+  supplier    Supplier @relation(fields: [supplierId], references: [id])
+  date        DateTime @default(now())
+  status      POStatus @default(PENDING)
+  totalAmount Float    @default(0)
+  notes       String?
+  documentPath String? // Path to archived PDF
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  items         PurchaseOrderItem[]
+  goodsReceipt  GoodsReceipt?
+}
+
+model GoodsReceipt {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  poId        String   @unique @db.ObjectId
+  purchaseOrder PurchaseOrder @relation(fields: [poId], references: [id])
+  doNumber    String
+  receivedAt  DateTime
+  receiver    String?
+  receiverSign String? // Base64 signature
+  courier     String?
+  courierSign String? // Base64 signature
+  condition   String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  items       GoodsReceiptItem[]
+}
+
+model GoodsReceiptItem {
+  id              String       @id @default(auto()) @map("_id") @db.ObjectId
+  goodsReceiptId  String       @db.ObjectId
+  goodsReceipt    GoodsReceipt @relation(fields: [goodsReceiptId], references: [id], onDelete: Cascade)
+  productId       String       @db.ObjectId
+  product         Product      @relation(fields: [productId], references: [id])
+  quantity        Float
+  quantityRejected Float      @default(0)
+  condition       String?
+}
+
+model PurchaseOrderItem {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  purchaseOrderId String        @db.ObjectId
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  productId       String        @db.ObjectId
+  product         Product       @relation(fields: [productId], references: [id])
+  quantity        Float
+  unit            String?
+  price           Float
+  notes           String?
+}
+
+model StockMovement {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId   String   @db.ObjectId
+  product     Product  @relation(fields: [productId], references: [id])
+  type        MovementType
+  quantity    Float
+  reference   String?  // PO Number or "MANUAL"
+  notes       String?
+  createdAt   DateTime @default(now())
+}
+
+model Recipe {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String       // Removed @unique to allow multiple batches of same menu
+  requestId   String?      // To prevent duplicate batches from same request
+  purchaseDate DateTime?   // Date from Purchase Request
+  description String?
+  defaultPortion Int       @default(1)
+  ingredients RecipeItem[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model RecipeItem {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  recipeId  String  @db.ObjectId
+  recipe    Recipe  @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  productId String  @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Float   // Quantity required for the recipe
+  unit      String  // Unit for the recipe (e.g., "gram", "ml")
+  notes     String? // e.g., "±150 gram/porsi matang"
+}
+
+model DeliveryQueue {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  menuName  String
+  quantity  Int
+  cookDate  DateTime @default(now())
+  status    String   // PENDING_QC, READY_TO_SHIP, SHIPPED, REJECTED
+  
+  // QC Details
+  qcBy      String?
+  qcDate    DateTime?
+  qcStatus  String? // PASS, REJECT
+  qcNotes   String?
+  photoUrl  String? // Path to QC Photo
+  
+  // Shipping Details
+  shippedAt     DateTime?
+  senderName    String?
+  destination   String?
+  receiverName  String?
+  arrivalTime   DateTime?
+  senderSign    String? // Base64 or URL
+  receiverSign  String? // Base64 or URL
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

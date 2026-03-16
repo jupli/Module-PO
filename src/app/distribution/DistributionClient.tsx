@@ -23,12 +23,10 @@ export default function DistributionPage({ initialItems }: { initialItems: any[]
   const [senderName, setSenderName] = useState('')
   const [destination, setDestination] = useState('')
   const [receiverName, setReceiverName] = useState('')
-  const [arrivalTime, setArrivalTime] = useState('')
   const [shippedAt, setShippedAt] = useState('')
   
   // Signatures
   const [senderSignRef, setSenderSignRef] = useState<HTMLCanvasElement | null>(null)
-  const [receiverSignRef, setReceiverSignRef] = useState<HTMLCanvasElement | null>(null)
 
   const pendingItems = items.filter((i: any) => i.status === 'PENDING_QC')
   const readyItems = items.filter((i: any) => i.status === 'READY_TO_SHIP')
@@ -130,7 +128,7 @@ export default function DistributionPage({ initialItems }: { initialItems: any[]
     setShippingItem(item)
     setIsShipping(true)
     setShippedAt(new Date().toISOString().slice(0, 16)) // Default to now
-    setDestination('Kantor Pusat') // Default destination
+    setDestination(item.destination || '') // Set destination from item field
   }
 
   const handleShipSubmit = async () => {
@@ -139,21 +137,20 @@ export default function DistributionPage({ initialItems }: { initialItems: any[]
       return
     }
 
-    if (!senderSignRef || !receiverSignRef) return
+    if (!senderSignRef) return
 
     setIsSubmitting(true)
     try {
         const senderSign = senderSignRef.toDataURL()
-        const receiverSign = receiverSignRef.toDataURL()
         
         const res = await shipItem(shippingItem.id, {
             senderName,
             destination,
             receiverName,
-            arrivalTime,
+            arrivalTime: '',
             shippedAt: new Date(shippedAt),
             senderSign,
-            receiverSign
+            receiverSign: ''
         })
 
         if (res.success) {
@@ -229,7 +226,9 @@ export default function DistributionPage({ initialItems }: { initialItems: any[]
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Menu</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Penerima</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Porsi</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto Paket</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu Masak</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
               </tr>
@@ -237,21 +236,35 @@ export default function DistributionPage({ initialItems }: { initialItems: any[]
             <tbody className="bg-white divide-y divide-gray-200">
               {pendingItems.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-4 text-center text-gray-500">Tidak ada antrian QC</td>
+                  <td colSpan={6} className="px-6 py-4 text-center text-gray-500">Tidak ada antrian QC</td>
                 </tr>
               ) : (
                 pendingItems.map((item: any) => (
                   <tr key={item.id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.menuName}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.destination || '-'}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.quantity} porsi</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <div className="flex items-center gap-2">
+                        <div className="h-10 w-10 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 overflow-hidden">
+                          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                        <span className="text-xs text-gray-400">(Upload di QC)</span>
+                      </div>
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {new Date(item.cookDate).toLocaleString('id-ID')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <button
                         onClick={() => setSelectedItem(item)}
-                        className="text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md text-sm"
+                        className="text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md text-sm flex items-center gap-1"
                       >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                         Proses QC
                       </button>
                     </td>
@@ -268,6 +281,7 @@ export default function DistributionPage({ initialItems }: { initialItems: any[]
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Menu</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tujuan</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">QC Oleh</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto Paket</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
@@ -276,12 +290,13 @@ export default function DistributionPage({ initialItems }: { initialItems: any[]
             <tbody className="bg-white divide-y divide-gray-200">
               {readyItems.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-4 text-center text-gray-500">Tidak ada item siap kirim</td>
+                  <td colSpan={5} className="px-6 py-4 text-center text-gray-500">Tidak ada item siap kirim</td>
                 </tr>
               ) : (
                 readyItems.map((item: any) => (
                   <tr key={item.id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.menuName}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.destination || '-'}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {item.qcBy}<br/>
                       <span className="text-xs text-gray-400">{new Date(item.qcDate).toLocaleString('id-ID')}</span>
@@ -409,20 +424,25 @@ export default function DistributionPage({ initialItems }: { initialItems: any[]
                       placeholder="Nama Penerima"
                     />
                   </div>
-                  <div>
-                    <label className="block text-gray-700 text-sm font-semibold mb-1">Jam Sampai (Estimasi/Aktual)</label>
-                    <input
-                      type="datetime-local"
-                      value={arrivalTime}
-                      onChange={(e) => setArrivalTime(e.target.value)}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                    />
-                  </div>
+
+                  {shippingItem.photoUrl && (
+                    <div>
+                      <label className="block text-gray-700 text-sm font-semibold mb-1">Foto Paket</label>
+                      <div className="rounded-lg overflow-hidden border border-gray-200">
+                        <img 
+                          src={shippingItem.photoUrl} 
+                          alt="Foto Paket" 
+                          className="w-full h-48 object-cover"
+                        />
+                      </div>
+                    </div>
+                  )}
+
                 </div>
               </div>
 
               {/* Signatures */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="mt-6">
                 <div>
                   <label className="block text-gray-700 text-sm font-semibold mb-2">Tanda Tangan Pengirim</label>
                   <div className="border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 h-40 relative hover:border-blue-400 transition-colors">
@@ -451,34 +471,6 @@ export default function DistributionPage({ initialItems }: { initialItems: any[]
                   </div>
                   <p className="text-xs text-gray-400 mt-1 text-center">Petugas Pengiriman</p>
                 </div>
-                <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2">Tanda Tangan Penerima</label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 h-40 relative hover:border-green-400 transition-colors">
-                    <canvas
-                      ref={(ref) => {
-                          setReceiverSignRef(ref)
-                          if (ref) initCanvas(ref)
-                      }}
-                      width={320}
-                      height={160}
-                      onMouseDown={(e) => startDrawing(e, receiverSignRef)}
-                      onMouseMove={(e) => draw(e, receiverSignRef)}
-                      onMouseUp={() => stopDrawing(receiverSignRef)}
-                      onMouseLeave={() => stopDrawing(receiverSignRef)}
-                      onTouchStart={(e) => startDrawing(e, receiverSignRef)}
-                      onTouchMove={(e) => draw(e, receiverSignRef)}
-                      onTouchEnd={() => stopDrawing(receiverSignRef)}
-                      className="w-full h-full cursor-crosshair touch-none rounded-lg"
-                    />
-                    <button 
-                      onClick={() => clearCanvas(receiverSignRef)}
-                      className="absolute bottom-2 right-2 text-xs text-red-600 hover:text-red-700 bg-white/90 px-3 py-1.5 rounded-md border shadow-sm font-medium transition-all hover:shadow"
-                    >
-                      Hapus Tanda Tangan
-                    </button>
-                  </div>
-                  <p className="text-xs text-gray-400 mt-1 text-center">Penerima Barang</p>
-                </div>
               </div>
             </div>
 
@@ -491,7 +483,6 @@ export default function DistributionPage({ initialItems }: { initialItems: any[]
                   setSenderName('')
                   setReceiverName('')
                   setDestination('')
-                  setArrivalTime('')
                 }}
                 className="px-5 py-2.5 rounded-lg text-gray-700 font-medium hover:bg-gray-200 transition-colors"
                 disabled={isSubmitting}

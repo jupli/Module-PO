@@ -1,11 +1,13 @@
 'use client'
 
 import { createProduct } from '../../actions/product'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useState, Suspense } from 'react'
 
-export default function NewProductPage() {
+function NewProductForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const preSelectedCategory = searchParams.get('category') || ''
   const [error, setError] = useState<string | null>(null)
 
   async function handleSubmit(formData: FormData) {
@@ -54,6 +56,25 @@ export default function NewProductPage() {
             required
             placeholder="Stock Keeping Unit"
           />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="category">
+            Category
+          </label>
+          <select
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
+            id="category"
+            name="category"
+            defaultValue={preSelectedCategory}
+          >
+            <option value="">Uncategorized (Lain-lain)</option>
+            <option value="Bahan Kering">Bahan Kering</option>
+            <option value="Bahan Basah">Bahan Basah</option>
+          </select>
+          <p className="text-gray-500 text-xs italic mt-1">
+            Selected category will ensure the item appears in the correct folder structure.
+          </p>
         </div>
 
         <div className="mb-4">
@@ -130,5 +151,13 @@ export default function NewProductPage() {
         </div>
       </form>
     </div>
+  )
+}
+
+export default function NewProductPage() {
+  return (
+    <Suspense fallback={<div>Loading form...</div>}>
+      <NewProductForm />
+    </Suspense>
   )
 }

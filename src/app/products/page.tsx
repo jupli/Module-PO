@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { getProducts, updateProduct } from '../actions/product'
+import { getProducts, updateProduct, switchProductCategory, deleteProduct } from '../actions/product'
 
 // Define the hierarchy structure
-const CATEGORY_STRUCTURE = {
+const CATEGORY_STRUCTURE: { [key: string]: string[] } = {
     'Bahan Kering': [
       'Beras', 'Tepung terigu', 'Tepung beras', 'Tepung maizena', 'Tepung tapioka', 'Gula pasir', 'Gula aren', 'gula merah', 
       'Garam', 'Kacang tanah', 'Kacang hijau', 'Kacang merah', 'Kacang kedelai', 'Kacang tolo', 'Kacang polong', 'Wijen', 
@@ -14,14 +14,14 @@ const CATEGORY_STRUCTURE = {
       'Daun jeruk kering', 'Mi kering', 'Bihun', 'Soun', 'Makaroni', 'Spaghetti', 'Tepung panir', 'breadcrumbs', 'Abon', 
       'Dendeng', 'Ikan asin', 'Kaldu bubuk', 'Penyedap rasa', 'Vanili', 'Cokelat bubuk', 'Santan bubuk', 'Susu bubuk', 
       'Ragi instan', 'Baking powder', 'Baking soda', 'Minyak goreng', 'Margarin', 'Minyak wijen', 'Minyak zaitun', 
-      'Sereal', 'Oatmeal', 'Granola', 'Biskuit', 'Crackers'
+      'Sereal', 'Oatmeal', 'Granola', 'Biskuit', 'Crackers', 'Air', 'Kecap', 'Saus', 'Sirup', 'Teh', 'Kopi', 'Cokelat'
     ],
     'Bahan Basah': [
       'Bayam', 'Kangkung', 'Sawi', 'Pakcoy', 'Kubis', 'kol', 'Wortel', 'Kentang', 'Tomat', 'Mentimun', 'Terong', 'Buncis', 
-      'Kacang panjang', 'Labu siam', 'Jagung manis', 'Brokoli', 'Kembang kol', 'Daun bawang', 'Seledri', 'Selada', 'Pisang', 
-      'Apel', 'Jeruk', 'Pepaya', 'Semangka', 'Melon', 'Mangga', 'Pir', 'Anggur', 'Daging Ayam', 'Ayam Potong', 'Daging Sapi', 'Ikan', 'Kepiting', 'Rajungan', 
+      'Kacang panjang', 'Labu siam', 'Jagung manis', 'Brokoli', 'Kembang kol', 'Daun bawang', 'Seledri', 'Sledri', 'Selada', 'Pisang', 
+      'Apel', 'Jeruk', 'Pepaya', 'Semangka', 'Melon', 'Mangga', 'Pir', 'Anggur', 'Ayam', 'Daging Sapi', 'Ikan', 'Kepiting', 'Rajungan', 
       'Udang', 'Cumi', 'Telur', 'Bawang merah', 'Bawang putih', 'Cabai', 'Jahe', 'Kunyit', 'Lengkuas', 'Serai', 'Daun salam', 
-      'Daun jeruk', 'Kemiri', 'Susu', 'Yogurt', 'Keju', 'Mentega', 'Tahu', 'Tempe', 'Oncom', 'Sosis', 'Bakso'
+      'Daun jeruk', 'Kemiri', 'Susu', 'Yogurt', 'Keju', 'Mentega', 'Tahu', 'Tempe', 'Oncom', 'Sosis', 'Bakso', 'Bakpau', 'Roti', 'Kue'
     ]
 }
 
@@ -52,6 +52,45 @@ export default function ProductsPage() {
     setEditingProduct(product)
   }
 
+  const handleSwitchCategory = async (id: string, currentCategory: string) => {
+    const newCategory = currentCategory === 'Bahan Basah' ? 'Bahan Kering' : 'Bahan Basah'
+    
+    // Optimistic Update
+    setProducts(prev => prev.map(p => {
+        if (p.id === id) return { ...p, category: newCategory }
+        return p
+    }))
+
+    const result = await switchProductCategory(id, newCategory)
+    if (result.success) {
+        // Redirect/Reset to Stock Bahan (Inventory) Root View as requested
+        setCurrentLevel('root')
+        setSelectedCategory(null)
+        setSelectedSubCategory(null)
+        setSearchTerm('') 
+        setFilterStatus('all')
+        fetchProducts() 
+    } else {
+        alert('Gagal memindahkan kategori')
+        // Revert
+        fetchProducts()
+    }
+  }
+
+  const handleDeleteProduct = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) return
+    
+    // Optimistic Update
+    setProducts(prev => prev.filter(p => p.id !== id))
+
+    const result = await deleteProduct(id)
+    if (!result.success) {
+        alert(result.error || 'Gagal menghapus produk')
+        // Revert
+        fetchProducts()
+    }
+  }
+
   // Navigation handlers
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category)
@@ -73,9 +112,68 @@ export default function ProductsPage() {
     }
   }
 
+  // Helper: Check if product matches a specific subcategory keyword
+  const isProductInSubcategory = (product: any, subCategory: string) => {
+    const nameLower = product.name.toLowerCase()
+    const subCatLower = subCategory.toLowerCase()
+
+    // Handle overlaps: "Kembang Kol" contains "Kol"
+    if ((subCatLower === 'kol' || subCatLower === 'kubis') && nameLower.includes('kembang')) {
+        return false
+    }
+    
+    // Handle overlaps: "Daging Ayam" contains "Ayam"
+    if (subCatLower === 'ayam' && nameLower.includes('bayam')) {
+        return false
+    }
+
+    return nameLower.includes(subCatLower)
+  }
+
+  // Helper: Get items in a category that DO NOT match any of its subcategories
+  const getUncategorizedInFolder = (categoryName: string) => {
+    if (!CATEGORY_STRUCTURE[categoryName]) return []
+    
+    const categoryProducts = products.filter(p => p.category === categoryName)
+    const definedSubcats = CATEGORY_STRUCTURE[categoryName]
+
+    return categoryProducts.filter(p => {
+        // Check if product matches ANY defined subcategory
+        const matchesAny = definedSubcats.some(subCat => isProductInSubcategory(p, subCat))
+        // If it matches none, it's "Uncategorized" within this folder
+        return !matchesAny
+    })
+  }
+
+  // Helper: Generate dynamic folder names for uncategorized items
+  const getDynamicFolders = (categoryName: string) => {
+    const uncategorized = getUncategorizedInFolder(categoryName)
+    // Map to unique names, Title Cased
+    const names = uncategorized.map(p => {
+         // Simple Title Case
+         return p.name.split(' ')
+            .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+            .join(' ')
+    })
+    // Deduplicate and sort
+    return Array.from(new Set(names)).sort()
+  }
+
   // Filter logic for Folders
   const getFolderFilteredItems = () => {
     if (currentLevel === 'subcategory' && selectedSubCategory) {
+      if (selectedSubCategory === 'Lain-lain') {
+        // Special case for global "Lain-lain" category (Level 1)
+        if (selectedCategory === 'Lain-lain') {
+             return products.filter(p => !p.category || (p.category !== 'Bahan Kering' && p.category !== 'Bahan Basah'))
+        }
+        // For internal folders, we no longer use "Lain-lain" as we have dynamic folders, 
+        // but keep this for fallback just in case
+        if (selectedCategory && CATEGORY_STRUCTURE[selectedCategory]) {
+            return getUncategorizedInFolder(selectedCategory)
+        }
+        return []
+      }
       return products.filter(p => p.name.toLowerCase().includes(selectedSubCategory.toLowerCase()))
     }
     return []
@@ -134,7 +232,10 @@ export default function ProductsPage() {
                 <option value="low_stock">Low Stock (&lt;10)</option>
                 <option value="out_of_stock">Out of Stock (0)</option>
             </select>
-            <Link href="/products/new" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-center whitespace-nowrap">
+            <Link 
+                href={selectedCategory && selectedCategory !== 'Lain-lain' ? `/products/new?category=${encodeURIComponent(selectedCategory)}` : '/products/new'} 
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-center whitespace-nowrap"
+            >
             + Add New Item
             </Link>
         </div>
@@ -162,11 +263,19 @@ export default function ProductsPage() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tgl Pemakaian</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                     </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                     {globalFilteredProducts.map((product) => (
-                        <ProductRow key={product.id} product={product} showCategory={true} onEdit={handleEditProduct} />
+                        <ProductRow 
+                            key={product.id} 
+                            product={product} 
+                            showCategory={true} 
+                            onEdit={handleEditProduct}
+                            onSwitchCategory={handleSwitchCategory}
+                            onDelete={handleDeleteProduct}
+                        />
                     ))}
                     {globalFilteredProducts.length === 0 && (
                         <tr>
@@ -228,31 +337,44 @@ export default function ProductsPage() {
             {/* LEVEL 2: Sub-Categories (Folders) */}
             {currentLevel === 'category' && selectedCategory && (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {/* @ts-ignore */}
-                    {CATEGORY_STRUCTURE[selectedCategory]?.map((subCat: string) => {
-                        // Count items matching this subcategory keyword
-                        const matchingProducts = products.filter(p => 
-                            p.category === selectedCategory && 
-                            p.name.toLowerCase().includes(subCat.toLowerCase())
-                        )
-                        const count = matchingProducts.length
-                        const totalStock = matchingProducts.reduce((sum, p) => sum + p.quantity, 0)
+                    {/* Combine Hardcoded + Dynamic Folders */}
+                    {(() => {
+                        const hardcodedFolders = CATEGORY_STRUCTURE[selectedCategory] || []
+                        const dynamicFolders = getDynamicFolders(selectedCategory)
+                        // Merge and ensure uniqueness (in case a dynamic folder matches a hardcoded one but was missed by filter)
+                        const allFolders = Array.from(new Set([...hardcodedFolders, ...dynamicFolders]))
 
-                        return (
-                            <div 
-                                key={subCat}
-                                onClick={() => handleSubCategoryClick(subCat)}
-                                className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-blue-50 transition-colors flex flex-col items-center text-center"
-                            >
-                                <div className="text-4xl mb-2">📂</div>
-                                <h4 className="font-semibold text-gray-700">{subCat}</h4>
-                                <div className="mt-2 flex flex-col gap-1">
-                                    <span className="text-xs bg-gray-100 px-2 py-1 rounded-full text-gray-600">{count} Jenis</span>
-                                    <span className={`text-xs font-bold ${totalStock > 0 ? 'text-green-600' : 'text-red-500'}`}>Stok: {totalStock}</span>
+                        return allFolders.map((subCat: string) => {
+                            // Count items matching this subcategory keyword
+                            const matchingProducts = products.filter(p => {
+                                const matchesCategory = p.category === selectedCategory
+                                if (!matchesCategory) return false
+
+                                // Reuse the helper function for consistency
+                                return isProductInSubcategory(p, subCat)
+                            })
+                            
+                            const count = matchingProducts.length
+                            const totalStock = matchingProducts.reduce((sum, p) => sum + p.quantity, 0)
+
+                            if (count === 0) return null // Hide empty folders
+
+                            return (
+                                <div 
+                                    key={subCat}
+                                    onClick={() => handleSubCategoryClick(subCat)}
+                                    className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-blue-50 transition-colors flex flex-col items-center text-center"
+                                >
+                                    <div className="text-4xl mb-2">📂</div>
+                                    <h4 className="font-semibold text-gray-700">{subCat}</h4>
+                                    <div className="mt-2 flex flex-col gap-1">
+                                        <span className="text-xs bg-gray-100 px-2 py-1 rounded-full text-gray-600">{count} Jenis</span>
+                                        <span className={`text-xs font-bold ${totalStock > 0 ? 'text-green-600' : 'text-red-500'}`}>Stok: {totalStock}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        )
-                    })}
+                            )
+                        })
+                    })()}
                 </div>
             )}
 
@@ -269,15 +391,28 @@ export default function ProductsPage() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tgl Pemakaian</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                     </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                     {selectedCategory === 'Lain-lain' 
                         ? products.filter(p => !p.category || (p.category !== 'Bahan Kering' && p.category !== 'Bahan Basah')).map((product) => (
-                        <ProductRow key={product.id} product={product} onEdit={handleEditProduct} /> 
+                        <ProductRow 
+                            key={product.id} 
+                            product={product} 
+                            onEdit={handleEditProduct} 
+                            onSwitchCategory={handleSwitchCategory}
+                            onDelete={handleDeleteProduct}
+                        /> 
                         ))
                         : getFolderFilteredItems().map((product) => (
-                        <ProductRow key={product.id} product={product} onEdit={handleEditProduct} />
+                        <ProductRow 
+                            key={product.id} 
+                            product={product} 
+                            onEdit={handleEditProduct}
+                            onSwitchCategory={handleSwitchCategory}
+                            onDelete={handleDeleteProduct}
+                        />
                         ))
                     }
                     {((selectedCategory !== 'Lain-lain' && getFolderFilteredItems().length === 0) || (selectedCategory === 'Lain-lain' && products.filter(p => !p.category || (p.category !== 'Bahan Kering' && p.category !== 'Bahan Basah')).length === 0)) && (
@@ -305,7 +440,7 @@ export default function ProductsPage() {
   )
 }
 
-function ProductRow({ product, showCategory = false, onEdit }: { product: any, showCategory?: boolean, onEdit: (p: any) => void }) {
+function ProductRow({ product, showCategory = false, onEdit, onSwitchCategory, onDelete }: { product: any, showCategory?: boolean, onEdit: (p: any) => void, onSwitchCategory?: (id: string, currentCategory: string) => void, onDelete?: (id: string) => void }) {
     return (
         <tr>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.sku}</td>
@@ -330,6 +465,33 @@ function ProductRow({ product, showCategory = false, onEdit }: { product: any, s
             </td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(product.price))}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center gap-2">
+                <button 
+                    onClick={() => onEdit(product)} 
+                    className="text-blue-600 hover:text-blue-900"
+                >
+                    Edit
+                </button>
+                {onSwitchCategory && (product.category === 'Bahan Basah' || product.category === 'Bahan Kering') && (
+                     <button 
+                        onClick={() => onSwitchCategory(product.id, product.category)} 
+                        className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 px-2 py-1 rounded border border-gray-300 flex items-center gap-1"
+                        title={product.category === 'Bahan Basah' ? 'Pindah ke Bahan Kering' : 'Pindah ke Bahan Basah'}
+                     >
+                        <span>⇄</span>
+                        {product.category === 'Bahan Basah' ? 'Kering' : 'Basah'}
+                     </button>
+                )}
+                {onDelete && (
+                    <button 
+                        onClick={() => onDelete(product.id)}
+                        className="text-red-600 hover:text-red-900 ml-2"
+                        title="Delete Product"
+                    >
+                        🗑️
+                    </button>
+                )}
             </td>
         </tr>
     )

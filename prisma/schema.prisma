@@ -3,12 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model Product {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(cuid())
   name        String
   sku         String   @unique
   description String?
@@ -16,7 +16,8 @@ model Product {
   price       Float    @default(0)
   unit        String   @default("pcs")
   category    String?
-  supplierId  String?  @db.ObjectId
+  packet      String?  // Field baru untuk menyimpan info Paket (e.g. "PAKET KERINGAN", "PAKET BUMIL")
+  supplierId  String?
   supplier    Supplier? @relation(fields: [supplierId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -28,7 +29,7 @@ model Product {
 }
 
 model Supplier {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid())
   name      String
   contact   String?
   address   String?
@@ -50,18 +51,25 @@ enum POStatus {
   CANCELLED
 }
 
+enum PaymentStatus {
+  UNPAID
+  PARTIAL
+  PAID
+}
+
 enum MovementType {
   IN
   OUT
 }
 
 model PurchaseOrder {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(cuid())
   poNumber    String   @unique
-  supplierId  String   @db.ObjectId
+  supplierId  String
   supplier    Supplier @relation(fields: [supplierId], references: [id])
   date        DateTime @default(now())
   status      POStatus @default(PENDING)
+  paymentStatus PaymentStatus @default(UNPAID)
   totalAmount Float    @default(0)
   notes       String?
   documentPath String? // Path to archived PDF
@@ -70,18 +78,33 @@ model PurchaseOrder {
 
   items         PurchaseOrderItem[]
   goodsReceipt  GoodsReceipt?
+  payments      PurchasePayment[]
+}
+
+model PurchasePayment {
+  id              String        @id @default(cuid())
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  amount          Float
+  paymentDate     DateTime      @default(now())
+  method          String        // CASH, TRANSFER, CREDIT
+  reference       String?       // Transfer ID / Check No
+  notes           String?
+  proofImage      String?       // Path/Url to proof image
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 }
 
 model GoodsReceipt {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  poId        String   @unique @db.ObjectId
+  id          String   @id @default(cuid())
+  poId        String   @unique
   purchaseOrder PurchaseOrder @relation(fields: [poId], references: [id])
   doNumber    String
   receivedAt  DateTime
   receiver    String?
-  receiverSign String? // Base64 signature
+  receiverSign String? @db.LongText // Base64 signature
   courier     String?
-  courierSign String? // Base64 signature
+  courierSign String? @db.LongText // Base64 signature
   condition   String?
   notes       String?
   createdAt   DateTime @default(now())
@@ -91,10 +114,10 @@ model GoodsReceipt {
 }
 
 model GoodsReceiptItem {
-  id              String       @id @default(auto()) @map("_id") @db.ObjectId
-  goodsReceiptId  String       @db.ObjectId
+  id              String       @id @default(cuid())
+  goodsReceiptId  String
   goodsReceipt    GoodsReceipt @relation(fields: [goodsReceiptId], references: [id], onDelete: Cascade)
-  productId       String       @db.ObjectId
+  productId       String
   product         Product      @relation(fields: [productId], references: [id])
   quantity        Float
   quantityRejected Float      @default(0)
@@ -102,10 +125,10 @@ model GoodsReceiptItem {
 }
 
 model PurchaseOrderItem {
-  id              String        @id @default(auto()) @map("_id") @db.ObjectId
-  purchaseOrderId String        @db.ObjectId
+  id              String        @id @default(cuid())
+  purchaseOrderId String
   purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
-  productId       String        @db.ObjectId
+  productId       String
   product         Product       @relation(fields: [productId], references: [id])
   quantity        Float
   unit            String?
@@ -114,8 +137,8 @@ model PurchaseOrderItem {
 }
 
 model StockMovement {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  productId   String   @db.ObjectId
+  id          String   @id @default(cuid())
+  productId   String
   product     Product  @relation(fields: [productId], references: [id])
   type        MovementType
   quantity    Float
@@ -125,7 +148,7 @@ model StockMovement {
 }
 
 model Recipe {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  id          String       @id @default(cuid())
   name        String       // Removed @unique to allow multiple batches of same menu
   requestId   String?      // To prevent duplicate batches from same request
   purchaseDate DateTime?   // Date from Purchase Request
@@ -137,10 +160,10 @@ model Recipe {
 }
 
 model RecipeItem {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  recipeId  String  @db.ObjectId
+  id        String  @id @default(cuid())
+  recipeId  String
   recipe    Recipe  @relation(fields: [recipeId], references: [id], onDelete: Cascade)
-  productId String  @db.ObjectId
+  productId String
   product   Product @relation(fields: [productId], references: [id])
   quantity  Float   // Quantity required for the recipe
   unit      String  // Unit for the recipe (e.g., "gram", "ml")
@@ -148,7 +171,7 @@ model RecipeItem {
 }
 
 model DeliveryQueue {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid())
   menuName  String
   quantity  Int
   cookDate  DateTime @default(now())
@@ -167,9 +190,93 @@ model DeliveryQueue {
   destination   String?
   receiverName  String?
   arrivalTime   DateTime?
-  senderSign    String? // Base64 or URL
-  receiverSign  String? // Base64 or URL
+  senderSign    String? @db.LongText // Base64 or URL
+  receiverSign  String? @db.LongText // Base64 or URL
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model DeliveryForm {
+  id              String   @id @default(cuid())
+  deliveryQueueId String
+  formTitle       String   @map("FormTitle")
+  courierName     String
+  senderName      String?
+  pickupAt        DateTime
+  destination     String
+  portions        Int
+  receiverName    String?  @map("ReceiverName")
+  photoUrl        String?
+  senderSign      String?  @db.LongText
+  courierSign     String?  @db.LongText
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([deliveryQueueId])
+  @@map("delivery_forms_dcms_app")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PurchaseRequest {
+  id        String   @id @default(cuid())
+  requestDate DateTime // Tanggal permintaan (dari Excel)
+  status    RequestStatus @default(PENDING)
+  notes     String?
+  purchasingSign String? @db.LongText // Base64 signature
+  managerSign    String? @db.LongText // Base64 signature
+  rejectionReason String? @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  items     PurchaseRequestItem[]
+}
+
+model PurchaseRequestItem {
+  id                String          @id @default(cuid())
+  purchaseRequestId String
+  purchaseRequest   PurchaseRequest @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
+  
+  itemName          String          // Nama bahan dari Excel
+  category          String?         // Kategori Menu (dari Excel)
+  portion           String?         // Porsi Besar / Kecil
+  quantity          Float
+  unit              String
+  price             Float           @default(0) // Harga satuan
+  notes             String?
+  
+  status            ItemStatus      @default(PENDING)
+}
+
+model Beneficiary {
+  id        String   @id @default(cuid())
+  name      String   // Nama Sekolah / Penerima Manfaat
+  total     Int      // Jumlah Siswa + GTK
+  portionSmall Int   // Porsi Kecil
+  portionLarge Int   // Porsi Besar
+  date      DateTime // Tanggal Data (biasanya per hari / per sheet)
+  category  String?  // PM PAKET BASAH / PM PAKET KERING / etc.
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PROCESSED
+}
+
+enum ItemStatus {
+  PENDING
+  PO_CREATED
+  REJECTED
 }

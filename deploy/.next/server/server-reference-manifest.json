@@ -1,0 +1,859 @@
+{
+  "node": {
+    "002eef9f4dc6d6e9b7d19aa884919ffb62b6f3ec8c": {
+      "workers": {
+        "app/_not-found/page": {
+          "moduleId": 71294,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/dashboard/page": {
+          "moduleId": 79455,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/distribution/page": {
+          "moduleId": 25870,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/inventory/incoming/[id]/page": {
+          "moduleId": 29088,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/inventory/incoming/page": {
+          "moduleId": 41368,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/migration/page": {
+          "moduleId": 10424,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/page": {
+          "moduleId": 58486,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/products/[id]/edit/page": {
+          "moduleId": 62314,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/products/new/page": {
+          "moduleId": 93523,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/products/page": {
+          "moduleId": 79169,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/purchase-orders/[id]/edit/page": {
+          "moduleId": 72522,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/purchase-orders/new/page": {
+          "moduleId": 53458,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/purchase-orders/page": {
+          "moduleId": 78887,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/purchasing/purchase/page": {
+          "moduleId": 16305,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/purchasing/request/page": {
+          "moduleId": 5824,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/purchasing/submission/page": {
+          "moduleId": 529,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/recipes/page": {
+          "moduleId": 57524,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/suppliers/[id]/edit/page": {
+          "moduleId": 14279,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/suppliers/new/page": {
+          "moduleId": 99615,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        },
+        "app/suppliers/page": {
+          "moduleId": 2075,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        }
+      },
+      "layer": {
+        "app/_not-found/page": "action-browser",
+        "app/dashboard/page": "action-browser",
+        "app/distribution/page": "action-browser",
+        "app/inventory/incoming/[id]/page": "action-browser",
+        "app/inventory/incoming/page": "action-browser",
+        "app/inventory/outgoing/page": "action-browser",
+        "app/migration/page": "action-browser",
+        "app/page": "action-browser",
+        "app/products/[id]/edit/page": "action-browser",
+        "app/products/new/page": "action-browser",
+        "app/products/page": "action-browser",
+        "app/purchase-orders/[id]/edit/page": "action-browser",
+        "app/purchase-orders/new/page": "action-browser",
+        "app/purchase-orders/page": "action-browser",
+        "app/purchasing/purchase/page": "action-browser",
+        "app/purchasing/request/page": "action-browser",
+        "app/purchasing/submission/page": "action-browser",
+        "app/recipes/page": "action-browser",
+        "app/suppliers/[id]/edit/page": "action-browser",
+        "app/suppliers/new/page": "action-browser",
+        "app/suppliers/page": "action-browser"
+      },
+      "filename": "src/app/actions/auth.ts",
+      "exportedName": "logout"
+    },
+    "60e9eeeee6c691eca2def2c209b1b792ad7a539a57": {
+      "workers": {
+        "app/page": {
+          "moduleId": 58486,
+          "async": false,
+          "exportedName": "login",
+          "filename": "src/app/actions/auth.ts"
+        }
+      },
+      "layer": {
+        "app/page": "action-browser"
+      },
+      "filename": "src/app/actions/auth.ts",
+      "exportedName": "login"
+    },
+    "00009de7bc07746f342436a1d04aaf56b9c80f8d24": {
+      "workers": {
+        "app/dashboard/page": {
+          "moduleId": 79455,
+          "async": false,
+          "exportedName": "getDashboardStats",
+          "filename": "src/app/actions/dashboard.ts"
+        }
+      },
+      "layer": {
+        "app/dashboard/page": "rsc"
+      },
+      "filename": "src/app/actions/dashboard.ts",
+      "exportedName": "getDashboardStats"
+    },
+    "004602c6b53f743417d2d47bc90d32272992e22bb0": {
+      "workers": {
+        "app/distribution/page": {
+          "moduleId": 25870,
+          "async": false,
+          "exportedName": "getDistributionItems",
+          "filename": "src/app/actions/distribution.ts"
+        }
+      },
+      "layer": {
+        "app/distribution/page": "rsc"
+      },
+      "filename": "src/app/actions/distribution.ts",
+      "exportedName": "getDistributionItems"
+    },
+    "603bf5e0aa1253255a7044123600db6643e26f36c7": {
+      "workers": {
+        "app/distribution/page": {
+          "moduleId": 25870,
+          "async": false,
+          "exportedName": "submitQC",
+          "filename": "src/app/actions/distribution.ts"
+        }
+      },
+      "layer": {
+        "app/distribution/page": "action-browser"
+      },
+      "filename": "src/app/actions/distribution.ts",
+      "exportedName": "submitQC"
+    },
+    "604abf21d5cb1ceb02c49ea38cb4d63dc8fbdcf47a": {
+      "workers": {
+        "app/distribution/page": {
+          "moduleId": 25870,
+          "async": false,
+          "exportedName": "shipItem",
+          "filename": "src/app/actions/distribution.ts"
+        }
+      },
+      "layer": {
+        "app/distribution/page": "action-browser"
+      },
+      "filename": "src/app/actions/distribution.ts",
+      "exportedName": "shipItem"
+    },
+    "40af95d2e4b21d9c4a25ec616ab9cfabd67f676c78": {
+      "workers": {
+        "app/distribution/page": {
+          "moduleId": 25870,
+          "async": false,
+          "exportedName": "archiveDocument",
+          "filename": "src/app/actions/archive.ts"
+        },
+        "app/purchasing/submission/page": {
+          "moduleId": 529,
+          "async": false,
+          "exportedName": "archiveDocument",
+          "filename": "src/app/actions/archive.ts"
+        }
+      },
+      "layer": {
+        "app/distribution/page": "action-browser",
+        "app/purchasing/submission/page": "action-browser"
+      },
+      "filename": "src/app/actions/archive.ts",
+      "exportedName": "archiveDocument"
+    },
+    "0037bb22d0186991a6d3d40f352e44e58e08603346": {
+      "workers": {
+        "app/inventory/incoming/[id]/page": {
+          "moduleId": 29088,
+          "async": false,
+          "exportedName": "getPurchaseOrders",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/inventory/incoming/page": {
+          "moduleId": 41368,
+          "async": false,
+          "exportedName": "getPurchaseOrders",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/[id]/edit/page": {
+          "moduleId": 72522,
+          "async": false,
+          "exportedName": "getPurchaseOrders",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/page": {
+          "moduleId": 78887,
+          "async": false,
+          "exportedName": "getPurchaseOrders",
+          "filename": "src/app/actions/po.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/incoming/[id]/page": "rsc",
+        "app/inventory/incoming/page": "rsc",
+        "app/purchase-orders/[id]/edit/page": "rsc",
+        "app/purchase-orders/page": "rsc"
+      },
+      "filename": "src/app/actions/po.ts",
+      "exportedName": "getPurchaseOrders"
+    },
+    "007997ed9765c3a9bf7bc55d8a2423a962e1ee1515": {
+      "workers": {
+        "app/inventory/incoming/[id]/page": {
+          "moduleId": 29088,
+          "async": false,
+          "exportedName": "getReceivedPurchaseOrders",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/inventory/incoming/page": {
+          "moduleId": 41368,
+          "async": false,
+          "exportedName": "getReceivedPurchaseOrders",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/[id]/edit/page": {
+          "moduleId": 72522,
+          "async": false,
+          "exportedName": "getReceivedPurchaseOrders",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/page": {
+          "moduleId": 78887,
+          "async": false,
+          "exportedName": "getReceivedPurchaseOrders",
+          "filename": "src/app/actions/po.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/incoming/[id]/page": "rsc",
+        "app/inventory/incoming/page": "rsc",
+        "app/purchase-orders/[id]/edit/page": "rsc",
+        "app/purchase-orders/page": "rsc"
+      },
+      "filename": "src/app/actions/po.ts",
+      "exportedName": "getReceivedPurchaseOrders"
+    },
+    "40517f511c5e04a239e5f16a5acfa452d84b7598fd": {
+      "workers": {
+        "app/inventory/incoming/[id]/page": {
+          "moduleId": 29088,
+          "async": false,
+          "exportedName": "createGoodsReceipt",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/inventory/incoming/page": {
+          "moduleId": 41368,
+          "async": false,
+          "exportedName": "createGoodsReceipt",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/[id]/edit/page": {
+          "moduleId": 72522,
+          "async": false,
+          "exportedName": "createGoodsReceipt",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/page": {
+          "moduleId": 78887,
+          "async": false,
+          "exportedName": "createGoodsReceipt",
+          "filename": "src/app/actions/po.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/incoming/[id]/page": "action-browser",
+        "app/inventory/incoming/page": "rsc",
+        "app/purchase-orders/[id]/edit/page": "rsc",
+        "app/purchase-orders/page": "rsc"
+      },
+      "filename": "src/app/actions/po.ts",
+      "exportedName": "createGoodsReceipt"
+    },
+    "4061256165048c324a9d56d587b79887f74d1081c1": {
+      "workers": {
+        "app/inventory/incoming/[id]/page": {
+          "moduleId": 29088,
+          "async": false,
+          "exportedName": "getPurchaseOrdersByStatus",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/inventory/incoming/page": {
+          "moduleId": 41368,
+          "async": false,
+          "exportedName": "getPurchaseOrdersByStatus",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/[id]/edit/page": {
+          "moduleId": 72522,
+          "async": false,
+          "exportedName": "getPurchaseOrdersByStatus",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/page": {
+          "moduleId": 78887,
+          "async": false,
+          "exportedName": "getPurchaseOrdersByStatus",
+          "filename": "src/app/actions/po.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/incoming/[id]/page": "rsc",
+        "app/inventory/incoming/page": "rsc",
+        "app/purchase-orders/[id]/edit/page": "rsc",
+        "app/purchase-orders/page": "rsc"
+      },
+      "filename": "src/app/actions/po.ts",
+      "exportedName": "getPurchaseOrdersByStatus"
+    },
+    "40ccb478d5eb1e1c160c480c6eec3f132c907eb27a": {
+      "workers": {
+        "app/inventory/incoming/[id]/page": {
+          "moduleId": 29088,
+          "async": false,
+          "exportedName": "createPurchaseOrder",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/inventory/incoming/page": {
+          "moduleId": 41368,
+          "async": false,
+          "exportedName": "createPurchaseOrder",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/[id]/edit/page": {
+          "moduleId": 72522,
+          "async": false,
+          "exportedName": "createPurchaseOrder",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/new/page": {
+          "moduleId": 53458,
+          "async": false,
+          "exportedName": "createPurchaseOrder",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/page": {
+          "moduleId": 78887,
+          "async": false,
+          "exportedName": "createPurchaseOrder",
+          "filename": "src/app/actions/po.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/incoming/[id]/page": "rsc",
+        "app/inventory/incoming/page": "rsc",
+        "app/purchase-orders/[id]/edit/page": "rsc",
+        "app/purchase-orders/new/page": "action-browser",
+        "app/purchase-orders/page": "rsc"
+      },
+      "filename": "src/app/actions/po.ts",
+      "exportedName": "createPurchaseOrder"
+    },
+    "40f1abec9827c895ceea2fc589c10358bf1bada764": {
+      "workers": {
+        "app/inventory/incoming/[id]/page": {
+          "moduleId": 29088,
+          "async": false,
+          "exportedName": "getPurchaseOrderById",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/inventory/incoming/page": {
+          "moduleId": 41368,
+          "async": false,
+          "exportedName": "getPurchaseOrderById",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/[id]/edit/page": {
+          "moduleId": 72522,
+          "async": false,
+          "exportedName": "getPurchaseOrderById",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/page": {
+          "moduleId": 78887,
+          "async": false,
+          "exportedName": "getPurchaseOrderById",
+          "filename": "src/app/actions/po.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/incoming/[id]/page": "rsc",
+        "app/inventory/incoming/page": "rsc",
+        "app/purchase-orders/[id]/edit/page": "rsc",
+        "app/purchase-orders/page": "rsc"
+      },
+      "filename": "src/app/actions/po.ts",
+      "exportedName": "getPurchaseOrderById"
+    },
+    "60ba7a2e3b80759246545bf9b7b303d3253c347f21": {
+      "workers": {
+        "app/inventory/incoming/[id]/page": {
+          "moduleId": 29088,
+          "async": false,
+          "exportedName": "updatePOStatus",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/inventory/incoming/page": {
+          "moduleId": 41368,
+          "async": false,
+          "exportedName": "updatePOStatus",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/[id]/edit/page": {
+          "moduleId": 72522,
+          "async": false,
+          "exportedName": "updatePOStatus",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/page": {
+          "moduleId": 78887,
+          "async": false,
+          "exportedName": "updatePOStatus",
+          "filename": "src/app/actions/po.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/incoming/[id]/page": "rsc",
+        "app/inventory/incoming/page": "rsc",
+        "app/purchase-orders/[id]/edit/page": "rsc",
+        "app/purchase-orders/page": "action-browser"
+      },
+      "filename": "src/app/actions/po.ts",
+      "exportedName": "updatePOStatus"
+    },
+    "60ed567fe5e6e737b8a22ef2b4fd586953124e3ea3": {
+      "workers": {
+        "app/inventory/incoming/[id]/page": {
+          "moduleId": 29088,
+          "async": false,
+          "exportedName": "updatePurchaseOrderItems",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/inventory/incoming/page": {
+          "moduleId": 41368,
+          "async": false,
+          "exportedName": "updatePurchaseOrderItems",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/[id]/edit/page": {
+          "moduleId": 72522,
+          "async": false,
+          "exportedName": "updatePurchaseOrderItems",
+          "filename": "src/app/actions/po.ts"
+        },
+        "app/purchase-orders/page": {
+          "moduleId": 78887,
+          "async": false,
+          "exportedName": "updatePurchaseOrderItems",
+          "filename": "src/app/actions/po.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/incoming/[id]/page": "rsc",
+        "app/inventory/incoming/page": "rsc",
+        "app/purchase-orders/[id]/edit/page": "action-browser",
+        "app/purchase-orders/page": "rsc"
+      },
+      "filename": "src/app/actions/po.ts",
+      "exportedName": "updatePurchaseOrderItems"
+    },
+    "00994176a85eb633c3b6ecc5fc97724d818e0f6a0b": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "getCategories",
+          "filename": "src/app/actions/product.ts"
+        },
+        "app/purchase-orders/new/page": {
+          "moduleId": 53458,
+          "async": false,
+          "exportedName": "getCategories",
+          "filename": "src/app/actions/product.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "rsc",
+        "app/purchase-orders/new/page": "rsc"
+      },
+      "filename": "src/app/actions/product.ts",
+      "exportedName": "getCategories"
+    },
+    "00ded28e6d9cd2cb9eeb2c2858909f25b916ed6e09": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "getProducts",
+          "filename": "src/app/actions/product.ts"
+        },
+        "app/products/page": {
+          "moduleId": 79169,
+          "async": false,
+          "exportedName": "getProducts",
+          "filename": "src/app/actions/product.ts"
+        },
+        "app/purchase-orders/new/page": {
+          "moduleId": 53458,
+          "async": false,
+          "exportedName": "getProducts",
+          "filename": "src/app/actions/product.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "rsc",
+        "app/products/page": "action-browser",
+        "app/purchase-orders/new/page": "rsc"
+      },
+      "filename": "src/app/actions/product.ts",
+      "exportedName": "getProducts"
+    },
+    "404aa834d8c9cd95077733fa677b6d347918bf647e": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "createProduct",
+          "filename": "src/app/actions/product.ts"
+        },
+        "app/products/new/page": {
+          "moduleId": 93523,
+          "async": false,
+          "exportedName": "createProduct",
+          "filename": "src/app/actions/product.ts"
+        },
+        "app/purchase-orders/new/page": {
+          "moduleId": 53458,
+          "async": false,
+          "exportedName": "createProduct",
+          "filename": "src/app/actions/product.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "rsc",
+        "app/products/new/page": "action-browser",
+        "app/purchase-orders/new/page": "rsc"
+      },
+      "filename": "src/app/actions/product.ts",
+      "exportedName": "createProduct"
+    },
+    "40965d215d82294c2985552e42065ac20fa06d1d12": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "getProductsByCategory",
+          "filename": "src/app/actions/product.ts"
+        },
+        "app/purchase-orders/new/page": {
+          "moduleId": 53458,
+          "async": false,
+          "exportedName": "getProductsByCategory",
+          "filename": "src/app/actions/product.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "rsc",
+        "app/purchase-orders/new/page": "rsc"
+      },
+      "filename": "src/app/actions/product.ts",
+      "exportedName": "getProductsByCategory"
+    },
+    "608ff4a883cf4b17f4e193cfd1891d610296d0abf0": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "updateProduct",
+          "filename": "src/app/actions/product.ts"
+        },
+        "app/products/[id]/edit/page": {
+          "moduleId": 62314,
+          "async": false,
+          "exportedName": "updateProduct",
+          "filename": "src/app/actions/product.ts"
+        },
+        "app/products/page": {
+          "moduleId": 79169,
+          "async": false,
+          "exportedName": "updateProduct",
+          "filename": "src/app/actions/product.ts"
+        },
+        "app/purchase-orders/new/page": {
+          "moduleId": 53458,
+          "async": false,
+          "exportedName": "updateProduct",
+          "filename": "src/app/actions/product.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "rsc",
+        "app/products/[id]/edit/page": "action-browser",
+        "app/products/page": "action-browser",
+        "app/purchase-orders/new/page": "rsc"
+      },
+      "filename": "src/app/actions/product.ts",
+      "exportedName": "updateProduct"
+    },
+    "00653f6d8cb33cf53b8f2876abb920036fd13f6828": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "getRecipes",
+          "filename": "src/app/actions/recipe.ts"
+        },
+        "app/recipes/page": {
+          "moduleId": 57524,
+          "async": false,
+          "exportedName": "getRecipes",
+          "filename": "src/app/actions/recipe.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "rsc",
+        "app/recipes/page": "rsc"
+      },
+      "filename": "src/app/actions/recipe.ts",
+      "exportedName": "getRecipes"
+    },
+    "60697e3e362f0bda2453e624f027d21c59c8c384ad": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "cookMenu",
+          "filename": "src/app/actions/recipe.ts"
+        },
+        "app/recipes/page": {
+          "moduleId": 57524,
+          "async": false,
+          "exportedName": "cookMenu",
+          "filename": "src/app/actions/recipe.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "action-browser",
+        "app/recipes/page": "rsc"
+      },
+      "filename": "src/app/actions/recipe.ts",
+      "exportedName": "cookMenu"
+    },
+    "704619324dcd98b923092a00fcd5f782ac1eea437f": {
+      "workers": {
+        "app/inventory/outgoing/page": {
+          "moduleId": 46270,
+          "async": false,
+          "exportedName": "extractAndSaveRecipes",
+          "filename": "src/app/actions/recipe.ts"
+        },
+        "app/purchasing/request/page": {
+          "moduleId": 5824,
+          "async": false,
+          "exportedName": "extractAndSaveRecipes",
+          "filename": "src/app/actions/recipe.ts"
+        },
+        "app/recipes/page": {
+          "moduleId": 57524,
+          "async": false,
+          "exportedName": "extractAndSaveRecipes",
+          "filename": "src/app/actions/recipe.ts"
+        }
+      },
+      "layer": {
+        "app/inventory/outgoing/page": "rsc",
+        "app/purchasing/request/page": "action-browser",
+        "app/recipes/page": "rsc"
+      },
+      "filename": "src/app/actions/recipe.ts",
+      "exportedName": "extractAndSaveRecipes"
+    },
+    "002a413351110812c34e5ff9c0ee9d6c03fabdf05e": {
+      "workers": {
+        "app/purchase-orders/new/page": {
+          "moduleId": 53458,
+          "async": false,
+          "exportedName": "getSuppliers",
+          "filename": "src/app/actions/supplier.ts"
+        },
+        "app/suppliers/page": {
+          "moduleId": 2075,
+          "async": false,
+          "exportedName": "getSuppliers",
+          "filename": "src/app/actions/supplier.ts"
+        }
+      },
+      "layer": {
+        "app/purchase-orders/new/page": "rsc",
+        "app/suppliers/page": "rsc"
+      },
+      "filename": "src/app/actions/supplier.ts",
+      "exportedName": "getSuppliers"
+    },
+    "404154a0bdeac5ecd24632cd93c88e98048a119988": {
+      "workers": {
+        "app/purchase-orders/new/page": {
+          "moduleId": 53458,
+          "async": false,
+          "exportedName": "createSupplier",
+          "filename": "src/app/actions/supplier.ts"
+        },
+        "app/suppliers/new/page": {
+          "moduleId": 99615,
+          "async": false,
+          "exportedName": "createSupplier",
+          "filename": "src/app/actions/supplier.ts"
+        },
+        "app/suppliers/page": {
+          "moduleId": 2075,
+          "async": false,
+          "exportedName": "createSupplier",
+          "filename": "src/app/actions/supplier.ts"
+        }
+      },
+      "layer": {
+        "app/purchase-orders/new/page": "rsc",
+        "app/suppliers/new/page": "action-browser",
+        "app/suppliers/page": "rsc"
+      },
+      "filename": "src/app/actions/supplier.ts",
+      "exportedName": "createSupplier"
+    },
+    "60a664b00201dad7b4ff968e8fe63da3530f461d76": {
+      "workers": {
+        "app/purchase-orders/new/page": {
+          "moduleId": 53458,
+          "async": false,
+          "exportedName": "updateSupplier",
+          "filename": "src/app/actions/supplier.ts"
+        },
+        "app/suppliers/[id]/edit/page": {
+          "moduleId": 14279,
+          "async": false,
+          "exportedName": "updateSupplier",
+          "filename": "src/app/actions/supplier.ts"
+        },
+        "app/suppliers/page": {
+          "moduleId": 2075,
+          "async": false,
+          "exportedName": "updateSupplier",
+          "filename": "src/app/actions/supplier.ts"
+        }
+      },
+      "layer": {
+        "app/purchase-orders/new/page": "rsc",
+        "app/suppliers/[id]/edit/page": "action-browser",
+        "app/suppliers/page": "rsc"
+      },
+      "filename": "src/app/actions/supplier.ts",
+      "exportedName": "updateSupplier"
+    },
+    "702f7c4b1ec50425f25d6d1dc3b010ed5a742c4e72": {
+      "workers": {
+        "app/purchasing/submission/page": {
+          "moduleId": 529,
+          "async": false,
+          "exportedName": "generatePOsFromRequest",
+          "filename": "src/app/actions/generate-po.ts"
+        }
+      },
+      "layer": {
+        "app/purchasing/submission/page": "action-browser"
+      },
+      "filename": "src/app/actions/generate-po.ts",
+      "exportedName": "generatePOsFromRequest"
+    }
+  },
+  "edge": {},
+  "encryptionKey": "fyrO+OAoJy1qG29whzBuhfTfeivhAyqJ98uMiQIgDI0="
+}

@@ -1,0 +1,50 @@
+{
+  "node": {
+    "002eef9f4dc6d6e9b7d19aa884919ffb62b6f3ec8c": {
+      "workers": {
+        "app/purchasing/submission/page": {
+          "moduleId": 529,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        }
+      },
+      "layer": {
+        "app/purchasing/submission/page": "action-browser"
+      },
+      "exportedName": "logout",
+      "filename": "src/app/actions/auth.ts"
+    },
+    "702f7c4b1ec50425f25d6d1dc3b010ed5a742c4e72": {
+      "workers": {
+        "app/purchasing/submission/page": {
+          "moduleId": 529,
+          "async": false,
+          "exportedName": "generatePOsFromRequest",
+          "filename": "src/app/actions/generate-po.ts"
+        }
+      },
+      "layer": {
+        "app/purchasing/submission/page": "action-browser"
+      },
+      "exportedName": "generatePOsFromRequest",
+      "filename": "src/app/actions/generate-po.ts"
+    },
+    "40af95d2e4b21d9c4a25ec616ab9cfabd67f676c78": {
+      "workers": {
+        "app/purchasing/submission/page": {
+          "moduleId": 529,
+          "async": false,
+          "exportedName": "archiveDocument",
+          "filename": "src/app/actions/archive.ts"
+        }
+      },
+      "layer": {
+        "app/purchasing/submission/page": "action-browser"
+      },
+      "exportedName": "archiveDocument",
+      "filename": "src/app/actions/archive.ts"
+    }
+  },
+  "edge": {}
+}

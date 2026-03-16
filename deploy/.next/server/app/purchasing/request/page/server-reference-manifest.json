@@ -1,0 +1,35 @@
+{
+  "node": {
+    "002eef9f4dc6d6e9b7d19aa884919ffb62b6f3ec8c": {
+      "workers": {
+        "app/purchasing/request/page": {
+          "moduleId": 5824,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        }
+      },
+      "layer": {
+        "app/purchasing/request/page": "action-browser"
+      },
+      "exportedName": "logout",
+      "filename": "src/app/actions/auth.ts"
+    },
+    "704619324dcd98b923092a00fcd5f782ac1eea437f": {
+      "workers": {
+        "app/purchasing/request/page": {
+          "moduleId": 5824,
+          "async": false,
+          "exportedName": "extractAndSaveRecipes",
+          "filename": "src/app/actions/recipe.ts"
+        }
+      },
+      "layer": {
+        "app/purchasing/request/page": "action-browser"
+      },
+      "exportedName": "extractAndSaveRecipes",
+      "filename": "src/app/actions/recipe.ts"
+    }
+  },
+  "edge": {}
+}

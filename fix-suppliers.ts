@@ -38,7 +38,7 @@ async function main() {
     const product = await prisma.product.findFirst({ 
       where: { 
         OR: [
-          { name: { contains: prodName, mode: 'insensitive' } },
+          { name: { contains: prodName } },
           { name: prodName }
         ]
       } 

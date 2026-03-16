@@ -53,3 +53,47 @@ export async function createGoodsIssue(data: {
     return { success: false, error: error.message }
   }
 }
+
+export async function getStockMovements(filters?: {
+  startDate?: Date
+  endDate?: Date
+  type?: MovementType
+  productId?: string
+}) {
+  try {
+    const where: any = {}
+
+    if (filters?.startDate && filters?.endDate) {
+      where.createdAt = {
+        gte: filters.startDate,
+        lte: filters.endDate
+      }
+    }
+
+    if (filters?.type) {
+      where.type = filters.type
+    }
+
+    if (filters?.productId) {
+      where.productId = filters.productId
+    }
+
+    const movements = await prisma.stockMovement.findMany({
+      where,
+      include: {
+        product: {
+          select: { name: true, unit: true, category: true }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      take: 100 // Limit for performance, maybe add pagination later
+    })
+
+    return { success: true, data: movements }
+  } catch (error) {
+    console.error('Failed to fetch stock movements:', error)
+    return { success: false, error: 'Failed to fetch stock movements' }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "node": {
+    "002eef9f4dc6d6e9b7d19aa884919ffb62b6f3ec8c": {
+      "workers": {
+        "app/products/new/page": {
+          "moduleId": 93523,
+          "async": false,
+          "exportedName": "logout",
+          "filename": "src/app/actions/auth.ts"
+        }
+      },
+      "layer": {
+        "app/products/new/page": "action-browser"
+      },
+      "exportedName": "logout",
+      "filename": "src/app/actions/auth.ts"
+    },
+    "404aa834d8c9cd95077733fa677b6d347918bf647e": {
+      "workers": {
+        "app/products/new/page": {
+          "moduleId": 93523,
+          "async": false,
+          "exportedName": "createProduct",
+          "filename": "src/app/actions/product.ts"
+        }
+      },
+      "layer": {
+        "app/products/new/page": "action-browser"
+      },
+      "exportedName": "createProduct",
+      "filename": "src/app/actions/product.ts"
+    }
+  },
+  "edge": {}
+}

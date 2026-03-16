@@ -41,13 +41,13 @@ export async function shipItem(id: string, data?: {
   senderName: string
   destination: string
   receiverName: string
-  arrivalTime: string // ISO string or time string
+  arrivalTime?: string // ISO string or time string
   senderSign: string
-  receiverSign: string
+  receiverSign?: string
   shippedAt: Date
 }) {
   try {
-    await prisma.deliveryQueue.update({
+    const updatedQueue = await prisma.deliveryQueue.update({
       where: { id },
       data: {
         status: 'SHIPPED',
@@ -58,6 +58,24 @@ export async function shipItem(id: string, data?: {
         arrivalTime: data?.arrivalTime ? new Date(data.arrivalTime) : undefined,
         senderSign: data?.senderSign,
         receiverSign: data?.receiverSign
+      }
+    })
+
+    // Create DeliveryForm record
+    // @ts-ignore: deliveryForm might not be generated yet
+    await prisma.deliveryForm.create({
+      data: {
+        deliveryQueueId: id,
+        formTitle: updatedQueue.menuName,
+        courierName: updatedQueue.senderName || 'Unknown',
+        senderName: null,
+        pickupAt: updatedQueue.shippedAt || new Date(),
+        destination: updatedQueue.destination || '',
+        portions: updatedQueue.quantity,
+        receiverName: updatedQueue.receiverName,
+        photoUrl: updatedQueue.photoUrl,
+        courierSign: updatedQueue.senderSign,
+        senderSign: null
       }
     })
     
